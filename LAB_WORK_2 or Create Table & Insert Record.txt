@@ -1,0 +1,88 @@
+1.Branch (branchname, branchcity, asset) 
+- city and asset should not null, asset greater than 0 
+
+CREATE TABLE Branch(branchname varchar(10) PRIMARY KEY,branchcity char(10) NOT NULL,asset number(10) NOT NULL CHECK(asset > 0))
+
+2.Customer (custname, custstreet, custcity) 
+- city not null 
+
+CREATE TABLE Customer(custname char(10) PRIMARY KEY,custstreet varchar(10),custcity varchar(10) NOT NULL)
+
+3.Account (accnum, branchname, balance) 
+- balance greater than 500 
+
+CREATE TABLE Account(accnum varchar(10) PRIMARY KEY,branchname varchar(10),balance number(10) CHECK(balance > 500))
+
+4.Loan (loanno, branchname, amount) 
+- amount greater than 0 
+
+CREATE TABLE Loan(loanno varchar(10) PRIMARY KEY,branchname varchar(10),amount number(10) CHECK(amount > 0))
+
+5.Create a relation borrower which is between customer and loan 
+
+CREATE TABLE Borrower(custname char(10), loanno varchar(10),FOREIGN KEY(custname)REFERENCES Customer , FOREIGN KEY(loanno)REFERENCES Loan); 
+
+6.Create a relation Depositor which is between customer and accnum 
+
+CREATE TABLE Depositor (custname char(10), accnum varchar(10),FOREIGN KEY(custname)REFERENCES Customer , FOREIGN KEY(accnum)REFERENCES Account); 
+
+7.Add Constraint street not null  
+
+ALTER TABLE Customer MODIFY(custstreet char(10) NOT NULL);
+
+8.Add a column phoneNo to customer table
+
+ALTER TABLE Customer ADD(phoneNo number(10)); 
+
+9.Add column custage to customer table  
+
+ALTER TABLE Customer ADD(custage number(10)); 
+
+10.Add Constraint age greater than 18  
+
+ALTER TABLE Customer MODIFY(custage number(10),CONSTRAINT n CHECK(custage>18));
+
+11.Change the size of the phoneNo to varchar(10)
+
+ALTER TABLE Customer MODIFY(phoneNo varchar(10));
+
+12.Drop the column phoneNo from customer table
+
+ALTER TABLE Customer DROP column phoneNo;
+
+13.Remove the constraint on age
+
+ALTER TABLE Customer DROP CONSTRAINT age;
+
+
+Inserting values in each table :
+
+insert into customer values('Miller','Cedar','Newark');
+insert into customer values('Nelson','Oak','Jersey City');
+insert into customer values('Peterson','Maple','New Brunswick');
+insert into customer values('Roberts','Elm','Hoboken');
+
+insert into account values('A-306','Elm Street',850);
+insert into account values('A-307','Maple Avenue',950);
+insert into account values('A-308','Pine Road',780);
+insert into account values('A-309','Cedar Lane',620);
+
+insert into depositor values('A-305','Miller');
+insert into depositor values('A-304','Nelson');
+insert into depositor values('A-303','Peterson');
+insert into depositor values('A-302','Roberts');
+
+insert into branch values('Brighton','Brooklyn','7100000');
+insert into branch values('Downtown','Jersey City','9000000');
+insert into branch values('Perryridge','Horseneck','1700000');
+insert into branch values('Round Hill','Newark','8000000');
+
+insert into loan values('L-17','Hoboken',1200);
+insert into loan values('L-16','Newark',1600);
+insert into loan values('L-15','Jersey City',1400);
+insert into loan values('L-14','New Brunswick',1100);
+
+insert into borrower values('L-18','Miller');
+insert into borrower values('L-19','Nelson');
+insert into borrower values('L-20','Peterson');
+insert into borrower values('L-21','Roberts');
