@@ -1,0 +1,217 @@
+1.Insert an Account A-978245 at the Park Street branch and that is has a balance of rs.1200
+
+  INSERT INTO Account(Account_number , branch, balance)
+  VALUES('A-978245','Park_Street',12000);
+
+2.Insert an customer Ram who live in street in Main Street and city is Ichalkaranji
+
+  INSERT INTO customers (customer_name, street, city)
+  VALUES ('Ram', 'Main Street', 'Ichalkaranji');
+
+3.Insert at least 5 rows in each table
+
+a.Insert Rows into customers Table
+
+  INSERT INTO customers (customer_id, customer_name, street, city)
+  VALUES  (1, 'Shravani', 'Main Street', 'Kolhapur'),
+ 	  (2, 'Pranita', 'Maple Street', 'Kagal'),
+          (3, 'Aditi', 'Pine Street', 'Sangli'),
+          (4, 'Varada', 'Oak Street', 'Ichalkaranji'),
+          (5, 'Asmita', 'Apple Street', 'Sangli');
+
+b.Insert Rows into accounts Table
+
+  INSERT INTO accounts (account_number, customer_id, balance)
+  VALUES  ('A-001', 1, 15000),
+          ('A-002', 2, 20000),
+          ('A-003', 3, 12000),
+          ('A-004', 4, 18000),
+          ('A-005', 5, 22000);
+  
+c. Insert Rows into branch Table 
+
+  INSERT INTO branch (branchname, branchcity, asset)
+  VALUES ('Perryridge','Horseneck','1700000');
+         ('North Town','Rye','3700000'); 
+         ('Downtown','Brooklyn','9000000');
+         ('Brighton','Brooklyn','7100000');
+         ('Mianus','Horseneck','400000');
+
+d. Insert Rows into loan Table 
+
+   INSERT INTO loan (loanno,branchname,amount)
+   VALUES ('L-11','Perryridge',1300);
+          ('L-12','Downtown',1500);
+          ('L-13','Perryridge',1500);
+	  ('L-14','Round Hill',900);
+          ('L-15','Downtown',1000);
+
+e. Insert Rows into borrower Table
+
+   INSERT INTO borrower (custname,loanno)
+   VALUES ('L-16','Jackson');
+          ('L-17','Hayes');
+          ('L-18','Adams');
+          ('L-19','Curry');
+	  ('L-20','Jones');
+
+f. Insert Rows into depositor Table
+
+   INSERT INTO borrower (custname,accnum)
+   VALUES ('A-217','Jones');
+          ('A-101','Johnson');
+          ('A-222','Lindsay');
+          ('A-102','Hayes');
+          ('A-201','Johnson');
+
+4.Change the assets of perryridge branch of 3400
+
+  UPDATE branches
+  SET assets = 3400
+  WHERE branch_name = 'Perryridge';
+
+5.Add 2% interest to all bank account balances with a balance of 500 or less
+
+  UPDATE accounts
+  SET balance = balance * 1.02 
+  WHERE balance <= 500;
+
+6.Transfer the accounts and loans of Perryridge branch to Downton branch 
+
+ a.For accounts Table
+
+  UPDATE accounts
+  SET branch_name = 'Downton'
+  WHERE branch_name = 'Perryridge';
+
+ b.For loans Table
+
+  UPDATE loans
+  SET branch_name = 'Downton'
+  WHERE branch_name = 'Perryridge';
+
+7.Transfer Rs.100 from account A-101 to A-215
+
+  BEGIN TRANSACTION;
+
+  UPDATE accounts
+  SET balance = balance - 100
+  WHERE account_number = 'A-101';
+
+  UPDATE accounts
+  SET balance = balance + 100
+  WHERE account_number = 'A-215';
+
+  COMMIT;
+
+8.Delete the branch Perryridge
+
+  DELETE FROM branches
+  WHERE branch_name = 'Perryridge';
+
+9.Remove all the customer who live in "Downtown"
+
+  DELETE FROM customers
+  WHERE city = 'Downtown';
+
+10.Remove all the accounts
+
+  DELETE FROM accounts;
+
+11.List all branch names and their assests
+ 
+  SELECT branch_name, assets
+  FROM branches;
+
+12.List all loans with amount greater than 1000
+
+  SELECT *FROM loans
+  WHERE amount > 1000;
+
+13.Find bank accounts with a balance under 700
+
+  SELECT * FROM accounts
+  WHERE balance < 700;
+
+14.List all accounts of Perryridge branch with balance less than 1000
+
+  SELECT * FROM accounts
+  WHERE branch_name = 'Perryridge' AND balance < 1000;
+
+15.Find the names of all branches in the loan relation 
+
+  SELECT DISTINCT branch_name
+  FROM loans;
+
+16.Find all loan numbers for loans made at the Park Street branch with loan amounts greater that RS.10000
+
+  SELECT loan_number FROM loans
+  WHERE branch_name = 'Park Street' AND amount > 10000;
+
+17.Find the loan number of those loans with loan amounts between Rs. 10000 and Rs. 50000 
+
+   SELECT loan_number
+   FROM loans
+   WHERE loan_amount BETWEEN 10000 AND 50000;
+
+18.Find the names of all customers
+
+   SELECT customer_name
+   FROM customers;
+
+   SELECT * FROM customers;
+
+19.Find the names of all branches in the loan relation, don't display duplicates
+
+   SELECT DISTINCT branch_name
+   FROM loans;
+
+20.Display the entire Branch table
+
+   SELECT * FROM Branch;
+
+21.Find the account number for all accounts where the balance is greater than $700
+
+   SELECT account_number
+   FROM accounts
+   WHERE balance > 700;
+
+22.Find the account number and balance for all accounts from Brighton where the balance is greater than 800
+
+   SELECT account_number, balance
+   FROM accounts
+   WHERE branch_name = 'Brighton' AND balance > 800;
+
+23.Display the branch name and assets from all branches in thousands of dollars and rename the assets column to 'assets in thousands'
+
+   SELECT branch_name, assets / 1000 AS "assets in thousands"
+   FROM Branch;
+
+24.Find the name of all branches with assets between one and four million dollars
+
+   SELECT branch_name
+   FROM Branch
+   WHERE assets BETWEEN 1000000 AND 4000000;
+
+25.Find the names of all customers whose street address includes the substring ‘Main’
+
+   SELECT customer_name
+   FROM customers
+   WHERE street_address LIKE '%Main%';
+
+26.List all Accounts where the Bank_Branch begins with a ‘C’ and has ‘a’ as the second character 
+
+   SELECT * FROM accounts
+   WHERE Bank_Branch LIKE 'Ca%';
+
+27. List all Accounts where the Bank_Branch column has ‘a’ as the second character and has at least 3 character
+
+   SELECT * FROM accounts
+   WHERE Bank_Branch LIKE '_a%'
+   AND LENGTH(Bank_Branch) >= 3;
+
+28.Find all loan numbers that appear in the loan relation with null values for amount
+
+   SELECT loan_number
+   FROM loans
+   WHERE loan_amount IS NULL;
