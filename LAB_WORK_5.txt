@@ -1,0 +1,78 @@
+Q1.Perform following queries on bank database: 
+
+1. List loan data, orderedby decreasing amounts,then increasing loannumbers
+
+select * from Loan 
+ORDER BY amount desc,loanno;
+
+2. Retrieve a list of all bank branch details, ordered by branch city, with each city’s branches listed in reverse order of holdings
+
+select * from Branch 
+ORDER BY branchcity,asset desc;
+
+3. Find the average account balance at each branch 
+
+select branchname,AVG(balance) 
+from Account 
+GROUP BY branchname;
+
+4. Find the number of customers city wise
+
+select customer_city, COUNT(DISTINCT customer_id) AS num_customers 
+from Customer 
+GROUP BY customer_city;
+
+5. Find the number of branches of the bank
+
+select branchname,count(*) 
+from Branch 
+GROUP BY branchname;
+
+6. Find the average account balance of those branches where the account balance is greater than Rs. 1200
+
+select branchname,AVG(balance) 
+from Account where balance > 1200 
+GROUP BY branchname;
+
+7. Find all cities with more than two customers living in the city
+
+select custcity 
+from Customer 
+GROUP BY custcity 
+HAVING COUNT(custcity) >= 2; 
+
+
+
+Q2. For EMPLOYEE schema: (Emp_no, E_name, E_address, E_ph_no, 
+Dept_no,Dept_name,Job_id,Designation , Salary, joiningdate) 
+Write SQL statements for the following query. 
+
+1.Display total salary spent for each job category
+
+select Designation, SUM(Salary) 
+from employee 
+GROUP BY Designation;
+
+2.Display lowest paid employee details under each manager
+
+select Dept_name, MIN(Salary) 
+from employee 
+GROUP BY Dept_name ; 
+ 
+3.Display number of employees working in each department and their department name
+
+select Dept_name, COUNT(Emp_no) AS num_employees
+from employee
+GROUP BY Dept_name;
+ 
+4.Display the details of employees sorting the salary in increasing order
+
+select * from employee 
+ORDER BY Salary ASC;
+
+5.Show the record of employee arning salary greater than 16000 in each department 
+
+select Dept_name 
+from employee 
+GROUP BY Dept_name 
+HAVING SUM(Salary) > 16000;
