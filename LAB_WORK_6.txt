@@ -1,0 +1,196 @@
+Q1. Perform following queries on bank database:
+
+1. Find the names and loan numbers of all customers who have a loan at the Perryridge branch.
+
+select customer_name, loan_number
+from loan L, borrower B, customer C
+where L.loan_number = B.loan_number
+AND B.customer_id = C.customer_id
+AND branch_name = 'Perryridge';
+
+select c.Name, l.LoanID
+from Customers c
+JOIN Loans l ON c.CustomerID = l.CustomerID
+JOIN Branches b ON l.BranchID = b.BranchID
+where b.BranchName = 'Perryridge';
+
+2. Display the list in alphabetic order all customers who have a loan at the Perryridge branch.
+
+select DISTINCT customer_name
+from loan L, borrower B, customer C
+where L.loan_number = B.loan_number
+AND B.customer_id = C.customer_id
+AND branch_name = 'Perryridge'
+ORDER BY customer_name;
+
+select DISTINCT c.Name
+from Customers c
+JOIN Loans l ON c.CustomerID = l.CustomerID
+JOIN Branches b ON l.BranchID = b.BranchID
+where b.BranchName = 'Perryridge'
+ORDER BY c.Name ASC;
+
+3. Find names of all branches with customer who have account in the bank and live in city whose name start with S.
+
+select DISTINCT branch_name
+from account A, depositor D, customer C
+where A.account_number = D.account_number
+AND D.customer_id = C.customer_id
+AND C.city LIKE 'S%';
+
+select DISTINCT b.BranchName
+from Branches b
+JOIN Accounts a ON b.BranchID = a.BranchID
+JOIN Customers c ON a.CustomerID = c.CustomerID
+where c.City LIKE 'S%';
+
+4. For all customers who have a loan from the bank, find their names, loan numbers, and loan amount.
+
+select customer_name, L.loan_number, L.loan_amount
+from loan L, borrower B, customer C
+where L.loan_number = B.loan_number
+AND B.customer_id = C.customer_id;
+
+select c.Name, l.LoanID, l.LoanAmount
+from Customers c
+JOIN Loans l ON c.CustomerID = l.CustomerID;
+
+5. Find the list of all customers in alphabetic order who have a loan at the Parkstreet branch.
+
+select DISTINCT customer_name
+from loan L, borrower B, customer C
+where L.loan_number = B.loan_number
+AND B.customer_id = C.customer_id
+AND branch_name = 'Parkstreet'
+ORDER BY customer_name;
+
+6. For all customers who have a loan from the bank, find their names, loan numbers, and loan amount.
+
+select customer_name, L.loan_number, L.loan_amount
+from loan L, borrower B, customer C
+where L.loan_number = B.loan_number
+AND B.customer_id = C.customer_id;
+
+7. Find the customer names, loan numbers, and loan amounts, for all loans at the Perryridge branch.
+
+select customer_name, L.loan_number, L.loan_amount
+from loan L, borrower B, customer C
+where L.loan_number = B.loan_number
+AND B.customer_id = C.customer_id
+AND branch_name = 'Perryridge';
+
+8. For all customers who have a loan from the bank, find their names and loan numbers with the attribute loan_number replaced by loan_id.
+
+select customer_name, L.loan_number AS loan_id
+from loan L, borrower B, customer C
+where L.loan_number = B.loan_number
+AND B.customer_id = C.customer_id;
+
+9. Find the name, account number, and balance of all customers who have an account.
+
+select customer_name, A.account_number, A.balance
+from account A, depositor D, customer C
+where A.account_number = D.account_number
+AND D.customer_id = C.customer_id;
+
+10. Find the name, loan number, and amunt of all customers who have an loan from Perryridge branch.
+
+select customer_name, L.loan_number, L.loan_amount
+from loan L, borrower B, customer C
+where L.loan_number = B.loan_number
+AND B.customer_id = C.customer_id
+AND branch_name = 'Perryridge';
+
+11. Find the name, account number, and balance of all customers who have an account with a balance of $400 or less.
+
+select customer_name, A.account_number, A.balance
+from account A, depositor D, customer C
+where A.account_number = D.account_number
+AND D.customer_id = C.customer_id
+AND A.balance <= 400;
+
+12. List all accounts of Brooklyn branch.
+
+select account_number
+from account
+where branch_name = 'Brooklyn';
+
+
+
+Q2. Consider the following schema: 
+Sailors (sid, sname, rating, age) 
+Boats (bid, bname, color) 
+Reserves (sid, bid, day(date)) 
+Write SQL statements for the following query. 
+
+1. Find all information of sailors who have reserved boat number 101. 
+
+select * from Sailors
+where sid IN (select sid from reserves where bid = 101);
+
+2. Find the name of boat reserved by Bob.
+ 
+select b.bname
+from Boats b
+JOIN Reserves r ON b.bid = r.bid
+JOIN Sailors s ON r.sid = s.sid
+where s.sname = 'Bob';
+
+3. Find the names of sailors who have reserved a red boat, and list in the order of a.
+
+select DISTINCT s.sname
+from Sailors s
+JOIN Reserves r ON s.sid = r.sid
+JOIN Boats b ON r.bid = b.bid
+where b.color = 'red'
+ORDER BY s.age;
+
+4. Find the names of sailors who have reserved at least one boat. 
+
+select DISTINCT s.sname
+from Sailors s
+JOIN Reserves r ON s.sid = r.sid;
+
+5. Find the ids and names of sailors who have reserved two different boats on the same day. 
+
+select r1.sid, s.sname
+from Reserves r1
+JOIN Reserves r2 ON r1.sid = r2.sid AND r1.bid <> r2.bid AND r1.day = r2.day
+JOIN Sailors s ON r1.sid = s.sid
+GROUP BY r1.sid, s.sname;
+
+6. Find the ids of sailors who have reserved a red boat or a green boat. 
+
+select DISTINCT r.sid
+from Reserves r
+JOIN Boats b ON r.bid = b.bid
+where b.color IN ('red', 'green');
+
+7. Find the name and the age of the youngest sailor.
+
+select s.sname, s.age
+from Sailors s
+where s.age = (select MIN(age) from Sailors);
+ 
+8. Count the number of different sailor names. 
+
+select COUNT(DISTINCT sname) AS unique_sailor_count
+from Sailors;
+
+9. Find the average age of sailors for each rating level. 
+
+select rating, AVG(age) AS average_age
+from Sailors
+GROUP BY rating;
+
+10. Find the average age of sailors for each rating level that has at least two sailors.
+ 
+select rating, AVG(age) AS average_age
+from Sailors
+GROUP BY rating
+HAVING COUNT(*) >= 2;
+
+
+
+
+
