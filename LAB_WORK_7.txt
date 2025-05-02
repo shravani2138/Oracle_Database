@@ -1,0 +1,147 @@
+Q1. Perform following queries on bank database:
+
+1. Find the name of the branch with the smallest number of assets.
+
+select branch_name 
+from branch 
+where asset = (select MIN(asset) from branch);
+
+2. Find the names of all branches that have assets greater than atleast one branch located in Brooklyn.
+
+select b1.branch_name 
+from branch b1 
+where b1.asset >ANY (select b2.asset from branch b2 where b2.branch_city='Brooklyn');
+
+3. Find all customers who have both an account and a loan at the bank.
+
+select distinct d.cust_name 
+from depositor d left outer join account a on d.acc_no=a.acc_no left outer join loan l on a.branch_name=l.branch_name 
+where l.loan_no is not null and a.acc_no is not null;
+
+4. Find all customers who do have a loan at the bank, but do not have an account at the bank.
+
+select distinct d.cust_name 
+from depositor d left outer join account a on d.acc_no=a.acc_no left outer join loan l on a.branch_name=l.branch_name 
+where a.acc_no is not null;
+
+5. Find the details of the largest loan at each branch, including the branch name and the amount of the loan.
+
+select branch_name,MAX(amount)
+from loan 
+group by branch_name;
+
+6. Find all customers who have both an account and a loan at the bank.
+
+select distinct d.cust_name 
+from depositor d left outer join account a on d.acc_no=a.acc_no left outer join loan l on a.branch_name=l.branch_name 
+where l.loan_no is not null and a.acc_no is not null;
+
+7. Find customers with an account but not a loan.
+
+select d.cust_name 
+from depositor d left outer join account a on d.acc_no = a.acc_no left outer join loan l on a.branch_name = l.branch_name 
+where l.loan_no is null;
+
+8. Find the names of all branches that have assets greater than those of at least one branch located in Brooklyn.
+
+select b1.branch_name 
+from branch b1 
+where b1.asset >ANY (select b2.asset from branch b2 where b2.branch_city='Brooklyn');
+
+9. Find the names of all branches that have an asset value greater than that of each branch in Brooklyn.
+
+select b1.branch_name 
+from branch b1 
+where b1.asset >All (select b2.asset from branch b2 where b2.branch_city='Brooklyn');
+
+10. Create view to be called all-customer contain all the customers of bank.
+
+create view all_customer as select cust_name from customer;
+
+11. Find the largest total account balance of any branch.
+
+select branch_id, SUM(balance) AS total_balance
+from accounts
+GROUP BY branch_id
+ORDER BY total_balance desc
+LIMIT 1;
+
+
+
+Q2. Consider the following schema:
+Sailors (sid, sname, rating, age)
+Boats (bid, bname, color)
+Reserves (sid, bid, day(date))
+
+Write SQL statements for the following query.
+
+1. Find all information of sailors who have reserved boat number 101.
+
+select * from Sailors
+where sid IN(select sid from reserves where bid = 101);
+
+2. Find the name of boat reserved by Bob.
+
+select B.bname
+from Boats B
+JOIN Reserves R ON B.bid = R.bid
+JOIN Sailors S ON R.sid = S.sid
+where S.sname = 'Bob';
+
+3. Find the names of sailors who have reserved a red boat, and list in the order of age.
+
+select DISTINCT S.sname
+from Sailors S
+JOIN Reserves R ON S.sid = R.sid
+JOIN Boats B ON R.bid = B.bid
+where B.color = 'red'
+ORDER BY S.age;
+
+4. Find the names of sailors who have reserved at least one boat.
+
+select DISTINCT S.sname
+from Sailors S
+JOIN Reserves R ON S.sid = R.sid;
+
+5. Find the ids and names of sailors who have reserved two different boats on the same day.
+
+select R1.sid, S.sname
+from Reserves R1
+JOIN Reserves R2 ON R1.sid = R2.sid AND R1.bid <> R2.bid AND R1.day = R2.day
+JOIN Sailors S ON R1.sid = S.sid
+GROUP BY R1.sid, S.sname;
+
+6. Find the ids of sailors who have reserved a red boat or a green boat.
+
+select DISTINCT S.sid
+from Sailors S
+JOIN Reserves R ON S.sid = R.sid
+JOIN Boats B ON R.bid = B.bid
+where B.color IN ('red', 'green');
+
+7. Find the name and the age of the youngest sailor.
+
+select sname, age
+from Sailors
+where age = (select MIN(age) from Sailors);
+
+8. Count the number of different sailor names.
+
+select COUNT(DISTINCT sname) AS different_sailor_names
+from Sailors;
+
+9. Find the average age of sailors for each rating level.
+
+select rating, AVG(age) AS average_age
+from Sailors
+GROUP BY rating;
+
+10. Find the average age of sailors for each rating level that has at least two sailors.
+
+select rating, AVG(age) AS average_age
+from Sailors
+GROUP BY rating
+HAVING COUNT(*) >= 2;
+
+
+
