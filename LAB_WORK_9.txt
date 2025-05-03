@@ -1,0 +1,102 @@
+CREATE OR REPLACE
+  2  PROCEDURE HELLO IS
+  3  BEGIN
+  4  DBMS_OUTPUT.PUT_LINE(’Hello World’);
+  5  END;
+  6  /
+
+Procedure created.
+
+set serveroutput on;
+CREATE OR REPLACE
+  2  PROCEDURE HELLO IS
+  3  BEGIN
+  4  DBMS_OUTPUT.PUT_LINE(’Hello World’);
+  5  END;
+  6  /
+
+Procedure created.
+
+exec Hello
+Hello World
+
+PL/SQL procedure successfully completed.
+
+exec hello;
+Hello World
+
+PL/SQL procedure successfully completed.
+
+CREATE OR REPLACE PROCEDURE ME(X IN NUMBER)Is
+  2  BEGIN
+  3  dbms_output.put_line(x*x);
+  4  end;
+  5  /
+
+Procedure created.
+
+set serveroutput on;
+CREATE OR REPLACE PROCEDURE ME(X IN NUMBER)Is
+  2  BEGIN
+  3  dbms_output.put_line(x*x);
+  4  end;
+  5  /
+
+Procedure created.
+
+exec me(3);
+
+
+1. Write a procedure which accept the account number of a customer and retrieve the balance.
+
+create PROCEDURE GetAccountBalance(IN account_number INT, OUT balance DECIMAL(10, 2))
+BEGIN
+    select account_balance INTO balance
+    from accounts
+    where account_no = account_number;
+END;
+
+To call the first procedure
+
+CALL GetAccountBalance(12345, @balance);
+select @balance;
+
+2. Write a procedure which accept the deptno and print minimum salary of employee working in that department.
+
+create PROCEDURE GetMinSalaryByDept(IN dept_no INT)
+BEGIN
+    DECLARE min_salary DECIMAL(10, 2);
+    
+    select MIN(salary) INTO min_salary
+    from employees
+    where department_id = dept_no;
+
+    select min_salary AS Minimum_Salary;
+END;
+
+To execute the second 
+CALL GetMinSalaryByDept(10);
+
+3. Write a function which accept a deptno and check whether it is present in dept Table or not. If it is present print number of employees working in that department.
+
+create FUNCTION CheckDeptAndCountEmployees(IN dept_no INT) RETURNS INT
+BEGIN
+    DECLARE employee_count INT;
+
+    IF EXISTS (SELECT 1 FROM departments WHERE department_id = dept_no) THEN
+        
+        select COUNT(*) INTO employee_count
+        from employees
+        where department_id = dept_no;
+
+        RETURN employee_count;
+    ELSE
+        RETURN 0; 
+    END IF;
+END;
+
+To use the function:
+
+select CheckDeptAndCountEmployees(10);
+
+
